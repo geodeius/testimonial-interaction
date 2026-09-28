@@ -85,6 +85,25 @@ const testimonials = [
   },
 ];
 
+const westAfricanCountries = [
+  { name: "Benin", flag: "🇧🇯" },
+  { name: "Burkina Faso", flag: "🇧🇫" },
+  { name: "Cabo Verde", flag: "🇨🇻" },
+  { name: "Côte d’Ivoire", flag: "🇨🇮" },
+  { name: "The Gambia", flag: "🇬🇲" },
+  { name: "Ghana", flag: "🇬🇭" },
+  { name: "Guinea", flag: "🇬🇳" },
+  { name: "Guinea-Bissau", flag: "🇬🇼" },
+  { name: "Liberia", flag: "🇱🇷" },
+  { name: "Mali", flag: "🇲🇱" },
+  { name: "Mauritania", flag: "🇲🇷" },
+  { name: "Niger", flag: "🇳🇪" },
+  { name: "Nigeria", flag: "🇳🇬" },
+  { name: "Senegal", flag: "🇸🇳" },
+  { name: "Sierra Leone", flag: "🇸🇱" },
+  { name: "Togo", flag: "🇹🇬" },
+];
+
 const ROW_COUNT = 5;
 const CARDS_PER_ROW = 6;
 const PIXELS_PER_SECOND = 35;
@@ -94,11 +113,16 @@ const rowOffsets = ["0rem", "8.75rem", "2.5rem", "11.25rem", "5rem"];
 const rowDistributions = Array.from({ length: ROW_COUNT }, (_, rowIndex) =>
   Array.from({ length: CARDS_PER_ROW }, (_, cardIndex) => {
     const testimonialIndex = (rowIndex * 5 + cardIndex * 7) % testimonials.length;
-    return testimonials[testimonialIndex];
+    const countryIndex = (rowIndex * 7 + cardIndex * 5 + 3) % westAfricanCountries.length;
+
+    return {
+      testimonial: testimonials[testimonialIndex],
+      country: westAfricanCountries[countryIndex],
+    };
   }),
 );
 
-function TestimonialCard(testimonial, instanceId) {
+function TestimonialCard(testimonial, country, instanceId) {
   const article = document.createElement("article");
   article.className = "testimonial-card";
   article.dataset.testimonialId = testimonial.id;
@@ -122,13 +146,24 @@ function TestimonialCard(testimonial, instanceId) {
   mark.className = "testimonial-card__mark";
   mark.setAttribute("aria-hidden", "true");
 
+  const flag = document.createElement("span");
+  flag.className = "testimonial-card__flag";
+  flag.setAttribute("role", "img");
+  flag.setAttribute("aria-label", country.name);
+  flag.title = country.name;
+  flag.textContent = country.flag;
+
+  const signals = document.createElement("div");
+  signals.className = "testimonial-card__signals";
+  signals.append(flag, mark);
+
   const quote = document.createElement("blockquote");
   quote.className = "testimonial-card__quote";
   quote.setAttribute("aria-labelledby", name.id);
   quote.textContent = `“${testimonial.quote}”`;
 
   person.append(name, role);
-  header.append(person, mark);
+  header.append(person, signals);
   article.append(header, quote);
 
   return article;
@@ -147,9 +182,9 @@ function TestimonialsWall({ duplicate = false } = {}) {
     row.className = "testimonials-row";
     row.style.setProperty("--row-offset", rowOffsets[rowIndex]);
 
-    rowTestimonials.forEach((testimonial, cardIndex) => {
+    rowTestimonials.forEach(({ testimonial, country }, cardIndex) => {
       const instanceId = `${duplicate ? "copy" : "source"}-${rowIndex}-${cardIndex}`;
-      row.append(TestimonialCard(testimonial, instanceId));
+      row.append(TestimonialCard(testimonial, country, instanceId));
     });
 
     wall.append(row);

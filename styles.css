@@ -168,6 +168,22 @@ body {
   text-wrap: pretty;
 }
 
+.testimonial-card__signals {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.testimonial-card__flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  font-size: 1.12rem;
+  line-height: 1;
+  filter: saturate(0.9);
+}
+
 .testimonial-card__mark {
   display: flex;
   gap: 0.42rem;
