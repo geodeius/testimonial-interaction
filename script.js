@@ -142,10 +142,6 @@ function TestimonialCard(testimonial, country, instanceId) {
   role.className = "testimonial-card__role";
   role.textContent = testimonial.role;
 
-  const mark = document.createElement("span");
-  mark.className = "testimonial-card__mark";
-  mark.setAttribute("aria-hidden", "true");
-
   const flag = document.createElement("span");
   flag.className = "testimonial-card__flag";
   flag.setAttribute("role", "img");
@@ -153,17 +149,13 @@ function TestimonialCard(testimonial, country, instanceId) {
   flag.title = country.name;
   flag.textContent = country.flag;
 
-  const signals = document.createElement("div");
-  signals.className = "testimonial-card__signals";
-  signals.append(flag, mark);
-
   const quote = document.createElement("blockquote");
   quote.className = "testimonial-card__quote";
   quote.setAttribute("aria-labelledby", name.id);
   quote.textContent = `“${testimonial.quote}”`;
 
   person.append(name, role);
-  header.append(person, signals);
+  header.append(person, flag);
   article.append(header, quote);
 
   return article;
